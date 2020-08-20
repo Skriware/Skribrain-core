@@ -18,7 +18,7 @@ bool loopTaskWDTEnabled;
 
 void loopTask(void *pvParameters)
 {
-    pinMode(32,INPUT);
+    pinMode(32,INPUT_PULLUP);
     if(digitalRead(32) == HIGH){
     setup();
     for(;;) {

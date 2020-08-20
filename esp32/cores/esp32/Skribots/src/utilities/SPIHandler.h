@@ -1,7 +1,7 @@
 #ifndef SPIHANDLER_H
 #define SPIHANDLER_H
 #include "Arduino.h"
-#include "../../../../../libraries/SPI/src/SPI.h"
+#include "../../../SPI/src/SPI.h"
 
 #define SPI_PORT_1 0
 #define SPI_PORT_2 1

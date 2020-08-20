@@ -7,7 +7,7 @@
 
 #include "Arduino.h"
 #ifndef _VARIANT_BBC_MICROBIT_
-#include "../../../../libraries/EEPROM/EEPROM.h"
+#include "../../EEPROM/EEPROM.h"
 #include "./utilities/Claw.h"
 #include "./utilities/Scope.h" 
 #include "./utilities/Adafruit_NeoPixel.h"

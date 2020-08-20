@@ -1,7 +1,7 @@
 #ifndef I2CHANDLER_H
 #define I2CHANDLER_H
 #include "Arduino.h"
-#include "../../../../../libraries/Wire/src/Wire.h"
+#include "../../../Wire/src/Wire.h"
 						
 class I2CHandler
 {

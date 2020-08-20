@@ -18,8 +18,8 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-#ifndef _SPI_H_INCLUDED
-#define _SPI_H_INCLUDED
+#ifndef _SPI_H_
+#define _SPI_H_
 
 #include <stdlib.h>
 #include "pins_arduino.h"
