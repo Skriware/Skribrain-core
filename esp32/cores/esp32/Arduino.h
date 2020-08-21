@@ -162,7 +162,7 @@ void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val);
 #include "HardwareSerial.h"
 #include "Esp.h"
 #include "./SPI/src/SPI.h"
-#include "./Skribots/src/Skribot.h"
+#include "./Skribots/src/Skribot_main.h"
 #include "./Wire/src/Wire.h"
 #include "./EEPROM/EEPROM.h"
 #include "SkribotApp.h"

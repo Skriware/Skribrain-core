@@ -1,4 +1,4 @@
-#include "Skribot.h"
+#include "Skribot_main.h"
 
 void Skribot::AddDCRotor(int SpeedPin,int DirectionPin, String Side){
     Rotor *dcrotor = new Rotor(SpeedPin,DirectionPin);

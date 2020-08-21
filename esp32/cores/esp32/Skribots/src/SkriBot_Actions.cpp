@@ -1,4 +1,4 @@
-#include "Skribot.h"
+#include "Skribot_main.h"
 
 void Skribot::CloseClaw(byte id){
          #ifndef _VARIANT_BBC_MICROBIT_

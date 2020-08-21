@@ -1,4 +1,4 @@
-#include "Skribot.h"
+#include "Skribot_main.h"
 
 #define EEPROM_EMPTY_ESP32 255
 #define EEPROM_EMPTY_ARDUINO 0

@@ -1,4 +1,4 @@
-#include "Skribot.h"
+#include "Skribot_main.h"
 //#define DEBUG_MODE_H
 #define SMART_ROTOR
 #ifdef DEBUG_MODE_H
