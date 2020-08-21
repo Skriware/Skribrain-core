@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include "PWM_Handler.h"
 
   byte used_PWM_channels = 0;

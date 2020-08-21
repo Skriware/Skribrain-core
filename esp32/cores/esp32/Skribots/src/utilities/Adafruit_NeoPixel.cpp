@@ -42,7 +42,7 @@
  * <http://www.gnu.org/licenses/>.
  *
  */
-
+#include <Arduino.h>
 #include "Adafruit_NeoPixel.h"
 
 #if defined(NRF52) || defined(NRF52_SERIES)

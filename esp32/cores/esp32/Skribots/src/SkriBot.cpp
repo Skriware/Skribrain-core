@@ -41,7 +41,7 @@ Skribot::Skribot(String predef){
   for(byte rr = 0;rr<5;rr++){
     Buzzers[rr]=NULL;
   }
-  Configure_Connections(predef);
+  if(predef != " ")Configure_Connections(predef);
 }
 
   int Skribot::BaterryCheck(){

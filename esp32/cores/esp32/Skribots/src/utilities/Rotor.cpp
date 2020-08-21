@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include "Rotor.h"
 
 Rotor::Rotor(int SpeedPin,int DirectionPin){

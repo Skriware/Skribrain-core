@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include "StatusLED.h"
 #define STATUS_LED_INTENSIVITY 30
 //#define RANDOM_BATTERY_READ

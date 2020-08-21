@@ -5,12 +5,11 @@
 //#define DEBUG_MODE_1
 
 
-#include "Arduino.h"
+//#include "Arduino.h"
 #ifndef _VARIANT_BBC_MICROBIT_
 #include "../../EEPROM/EEPROM.h"
 #include "./utilities/Claw.h"
 #include "./utilities/Scope.h" 
-#include "./utilities/Adafruit_NeoPixel.h"
 #include "./utilities/RobotLED.h"
 #include "./utilities/RGB_LED_Matrix.h"
 #include "./utilities/IRStation.h"
@@ -144,8 +143,8 @@
 #define SKRIBOT_MINI_SHILELD_IR_OUT 9
 #endif
 
-#define LEFT 0
-#define RIGHT 1
+#define LEFT_side 0
+#define RIGHT_side 1
 
 #define EEPROM_EMPTY_ESP32 255
 #define EEPROM_EMPTY_ARDUINO 0
@@ -156,7 +155,7 @@
   class Skribot
  {
   public:
-  	Skribot(String predef = "");
+  	Skribot(String predef = " ");
   	void AddDistSensor(int EchoPin,int TrigPin,String Name);
     void AddDistSensor(int EchoPin,int TrigPin,int id);
     void AddDistSensor(byte DIST_PORT);
@@ -314,8 +313,8 @@
 //calibration parameters:
 byte left_invert = 0;
 byte right_invert = 0;
-byte left_scale = 1;
-byte right_scale = 1;
+byte left_scale = 100;
+byte right_scale = 100;
 int L1_b = 1900;
 int L2_b = 1900;
 int L3_b = 1900;

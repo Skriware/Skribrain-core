@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include "Mono_LED_Matrix.h"
 #include "Mono_LED_Matrix_font.h"
 

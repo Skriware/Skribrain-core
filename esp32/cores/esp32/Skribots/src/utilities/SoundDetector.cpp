@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include "SoundDetector.h"
 
 int SoundDetector::Nsignal = 0;

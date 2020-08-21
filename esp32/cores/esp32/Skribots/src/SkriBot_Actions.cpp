@@ -290,7 +290,7 @@ void Skribot::CloseClaw(byte id){
 
           switch(motor_id){
            
-            case LEFT:
+            case LEFT_side:
                   for(int kk = 0; kk < NLeftDCRotors ; kk++){
                     LeftDCRotors[kk]->SetDirection(dir);
                     LeftDCRotors[kk]->SetSpeed(speed);
@@ -298,7 +298,7 @@ void Skribot::CloseClaw(byte id){
                   }
             break;
             
-            case RIGHT:
+            case RIGHT_side:
                   for(int kk = 0; kk < NRightDCRotors ; kk++){
                     RightDCRotors[kk]->SetDirection(dir);
                     RightDCRotors[kk]->SetSpeed(speed);

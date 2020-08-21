@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include "LightSensor.h"
 
 LightSensor::LightSensor(int _PIN,int _ID){

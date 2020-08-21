@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include "SPIHandler.h"
 
   uint8_t SPIHandler::used_spi_bus = 0;

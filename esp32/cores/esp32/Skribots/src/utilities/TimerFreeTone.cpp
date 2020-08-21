@@ -4,7 +4,7 @@
 //
 // See "TimerFreeTone.h" for purpose, syntax, version history, links, and more.
 // ---------------------------------------------------------------------------
-
+#include <Arduino.h>
 #include "TimerFreeTone.h"
 
 #ifdef ESP_H

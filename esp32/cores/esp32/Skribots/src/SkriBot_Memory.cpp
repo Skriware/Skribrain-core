@@ -151,6 +151,8 @@ bool Skribot::Check_Board_Version(){
 
   
      void Skribot::Scale_Left_Rotors(byte scale){
+      Serial.println("Scalling rotors:");
+      Serial.println(scale);
        for(int kkk = 0; kkk < NLeftDCRotors ; kkk++){
                     LeftDCRotors[kkk]->scale_speed(scale);
                   }

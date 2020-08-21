@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include "I2CHandler.h"
 	  #ifdef ESP_H
 	uint8_t I2CHandler::used_i2c_bus = 0;

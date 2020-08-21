@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include "DistSensor.h"
 
 DistSensor::DistSensor(int EP,int Trigg, String Name){

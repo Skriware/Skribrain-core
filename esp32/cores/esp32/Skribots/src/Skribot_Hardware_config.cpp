@@ -5,6 +5,7 @@ void Skribot::AddDCRotor(int SpeedPin,int DirectionPin, String Side){
      if(Side == "Left"){
       LeftDCRotors[NLeftDCRotors] = dcrotor;
       NLeftDCRotors++;
+      Serial.println("Rotor Added!");
       if(user_config){
         if(!EEPROM_EMPTY(left_invert))Invert_Left_Rotors(left_invert);
         if(!EEPROM_EMPTY(left_scale))Scale_Left_Rotors(left_scale);
@@ -12,6 +13,7 @@ void Skribot::AddDCRotor(int SpeedPin,int DirectionPin, String Side){
      }else if(Side == "Right"){
       RightDCRotors[NRightDCRotors] = dcrotor;
       NRightDCRotors++;
+      Serial.println("Rotor Added!");
       if(user_config){
         if(!EEPROM_EMPTY(right_invert))Invert_Right_Rotors(right_invert);
         if(!EEPROM_EMPTY(right_scale))Scale_Right_Rotors(right_scale);
@@ -89,12 +91,14 @@ void Skribot::AddDCRotor(int SpeedPin,int DirectionPin, String Side){
     }
     void Skribot::AddDCRotor(String SHIELD_SLOT){
       #ifndef ESP_H 
+      Serial.println("Adding rotor!");
       if(SHIELD_SLOT == "LEFT"){
         AddDCRotor(EDU_ROTOR_SPEED_PIN_L,EDU_ROTOR_DIR_PIN_L,"Left");          
       }else if(SHIELD_SLOT == "RIGHT"){
         AddDCRotor(EDU_ROTOR_SPEED_PIN_R,EDU_ROTOR_DIR_PIN_R,"Right");
       }
       #else
+       Serial.println("Adding rotor!");
        if(SHIELD_SLOT == "LEFT"){
         AddDCRotor(SKRIBRAIN_MOTOR_L_DIR2_PIN,SKRIBRAIN_MOTOR_L_DIR1_PIN,"Left");          
       }else if(SHIELD_SLOT == "RIGHT"){
