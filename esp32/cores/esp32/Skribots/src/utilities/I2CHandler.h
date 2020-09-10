@@ -18,7 +18,7 @@ public:
 	  bool I2CTransfer(byte *msg,byte addr = 0);
 	  uint8_t I2C_get_output(byte ii);
 	  void I2C_end();
-	  
+	  uint8_t output_buffer[16];  
 private:
 	#ifdef ESP_H
 	byte SDA_PIN;
@@ -27,7 +27,7 @@ private:
 	#endif
 	TwoWire *i2c = NULL;
 	uint32_t clock = 100000;
-	uint8_t output_buffer[16];
+	
 	uint8_t addresses[10];
 	byte connected_devices;
 };

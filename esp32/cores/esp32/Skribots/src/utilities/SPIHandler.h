@@ -39,6 +39,7 @@ public:
 	  uint8_t get_SPIPORT();
 	  void SPI_end();
 	  static uint8_t used_spi_bus;
+	  uint32_t output[16];
 private:
 	#ifdef ESP_H
 	uint8_t MOSI_PIN;
@@ -57,7 +58,6 @@ private:
 	uint8_t _dataMode = SPI_MODE0;
 	uint8_t bit_format;
 	SPIClass *_spi;
-	uint32_t output[16];
 };
 
 
