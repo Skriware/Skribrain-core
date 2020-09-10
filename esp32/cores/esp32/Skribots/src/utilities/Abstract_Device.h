@@ -8,19 +8,17 @@
 #define PWM_WRITE 	4
 #define DAC_WRITE 	5
 #define PULSE_IN	6
+#define TOUCH 7
 
 class Abstract_Device{
   public:
-    Abstract_Device(byte n_channels, byte *pins, byte *ids);
-    uint32_t 	performChannelAction(byte pin, byte input = 0);
-  	uint32_t 	performComplexAction(byte *action_section);
-  	byte*	performSPITransfer(byte *msg);
-  	byte*	performI2CTransfer(byte addr, byte *msg);
-  	void 		channel_Init();
+    Abstract_Device(byte pins, byte action_id);
+    uint32_t 	performChannelAction(byte input = 0);
+  	bool 		channel_Init();
+    bool    verifyGPIO(byte *table);
   private:
-  byte active_channels;
-  byte *channel_pins;
-  byte *channel_ids;
+  byte channel_pin;
+  byte channel_id;
   byte output;
  };
 

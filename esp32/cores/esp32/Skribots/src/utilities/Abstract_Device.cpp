@@ -1,61 +1,78 @@
 #include "Abstract_Device.h"
 
-	void Abstract_Device::channel_Init(){
-
-	}
-
-	Abstract_Device::Abstract_Device(byte n_channels, byte *pins, byte *ids){
-		active_channels = n_channels;
-		if(active_channels == 1){
-		  channel_pins = pins;
-		  channel_ids = ids;
-		}else{
-		  channel_pins = new byte[active_channels];
-		  channel_ids	= new byte[active_channels];
-		  for(byte rr = 0; rr < active_channels;rr++){
-		  	channel_ids[rr] = ids[rr];
-		  	channel_pins[rr] = pins[rr];
-		  }
+	bool Abstract_Device::verifyGPIO(byte *table){
+		bool tmp = false;
+		for(byte rr = 1; rr< table[0]+1;rr++){
+			if(channel_pin == table[rr]){
+				tmp = true;
+				break;
+			}
 		}
+		return(tmp);
 	}
 
-    uint32_t 	Abstract_Device::performChannelAction(byte pin,byte input){
-    	uint32_t output = 0;
-    	byte channel_id = 0;
-    	if(active_channels == 1){
-    		channel_id = channel_ids[0];
-    	}else{
-    		for(int yy = 0; yy < active_channels; yy++){
-    			if(pin == channel_pins[yy]){
-    				channel_id = yy;
-    				break;
-    			}
-    		}
-    	}
-
-    	switch(channel_id){
-    		case D_READ:
-    			output = digitalRead(pin);
+	bool Abstract_Device::channel_Init(){
+		bool tmp = true; 
+		byte ADC_PINS[]= {6,36,39,34,35,32,33};
+		byte DAC_PINS[]= {2,26,25};
+		byte TOUCH_PINS[]= {10,4,0,2,15,13,12,14,27,33,32}; 
+		switch(channel_id){
+			case D_READ:
+    			pinMode(channel_pin,INPUT);
     		break;	
 			case D_WRITE:
-				digitalWrite(pin,input);
+				pinMode(channel_pin,OUTPUT);
 			break;	
 			case A_READ:
-				output = analogRead(pin);
+				tmp = verifyGPIO(ADC_PINS);
 			break;	
 			case PWM_WRITE:
-				PWM_Write(pin,input);
+				 if(SetNewPWMChannel(channel_pin) == -1)tmp=false;
 			break;	
 			case DAC_WRITE:
-				dacWrite(pin, input);
+				tmp = verifyGPIO(DAC_PINS);
 			break;	
 			case PULSE_IN:
-				output = pulseIn(pin,input,15000);
+				 pinMode(channel_pin,INPUT);
+			break;
+			case TOUCH:
+				tmp =verifyGPIO(TOUCH_PINS);
+			break;	
+		}
+		return(tmp);
+
+	}
+
+	Abstract_Device::Abstract_Device(byte _channel_pin, byte _channel_id){
+		channel_pin = _channel_pin;
+		channel_id =  _channel_id;
+	}
+
+    uint32_t 	Abstract_Device::performChannelAction(byte input){
+    	uint32_t output = 0;
+    	switch(channel_id){
+    		case D_READ:
+    			output = digitalRead(channel_pin);
+    		break;	
+			case D_WRITE:
+				digitalWrite(channel_pin,input);
+			break;	
+			case A_READ:
+				output = analogRead(channel_pin);
+			break;	
+			case PWM_WRITE:
+				PWM_Write(channel_pin,input);
+			break;	
+			case DAC_WRITE:
+				dacWrite(channel_pin, input);
+			break;	
+			case PULSE_IN:
+				output = pulseIn(channel_pin,input,15000);
+			break;
+			case TOUCH:
+				output = touchRead(channel_pin);
 			break;	
     	}
     	return(output);
     }
-  	uint32_t 	Abstract_Device::performComplexAction(byte *action_section){
-
-  	}
   	
