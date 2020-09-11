@@ -11,13 +11,17 @@ Skribot::Skribot(String predef){
   NDistSensors    = 0;
   NLEDs           = 0;
   NLineSensors    = 0;
-  NScopes         = 0;
   NLeftDCRotors   = 0;
   NRightDCRotors  = 0;
   NClaws          = 0;
-  BTmodule = NULL;
+  NABSDevices     = 0;
+  NSPIDevices     = 0;
+  NI2CDevices     = 0;
+  BTmodule   = NULL;
   SPIcomm[0] = NULL;
   SPIcomm[1] = NULL;
+  I2Ccomm[0] = NULL;
+  I2Ccomm[1] = NULL;
   using_BLE_Connection = false;
   program_End_Reported = false;
   connection_Break_Reported = false;
@@ -32,15 +36,18 @@ Skribot::Skribot(String predef){
   leftSmartRotor = NULL;
   rightSmartRotor = NULL;
   smartRotor = NULL;
-  for(byte tt = 0; tt < 2; tt++){
-    DistSensors[tt]=NULL;
-    LED_Matrixes[tt]=NULL;
-    LeftDCRotors[tt]=NULL;
-    RightDCRotors[tt]=NULL;
+  for(byte tt = 0; tt < MAX_HARDWARE; tt++){
+    if(tt < MAX_LED_MATRIX)   LED_Matrixes[tt]  =NULL;
+    if(tt < MAX_LEFT_ROTORS)  LeftDCRotors[tt]  =NULL;
+    if(tt < MAX_RIGHT_ROTORS) RightDCRotors[tt] =NULL;
+    if(tt < MAX_DIST_SENSORS) DistSensors[tt]   =NULL;
+    if(tt < MAX_LINE_SENSORS) LineSensors[tt]   =NULL;
+    if(tt < MAX_LEDs)         LEDs[tt]          =NULL;
+    if(tt < MAX_CLAWS)        Claws[tt]         =NULL;
+    if(tt < MAX_BUZZERS)      Buzzers[tt]       =NULL;
+    if(tt < MAX_ABS_DIV)      Devices[tt]       =NULL;
   }
-  for(byte rr = 0;rr<5;rr++){
-    Buzzers[rr]=NULL;
-  }
+
   if(predef != " ")Configure_Connections(predef);
 }
 

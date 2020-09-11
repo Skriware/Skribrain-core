@@ -40,12 +40,6 @@ void Skribot::AddDCRotor(int SpeedPin,int DirectionPin, String Side){
     Set_Line_Sensor_Logic_Border(L1_b,L2_b,L3_b);
   }
 
-  void Skribot::AddLightSensor(int pinL,int id){
-    LightSensor *lsensor = new LightSensor(pinL,id);
-    LightSensors[NLightSensors] =  lsensor;
-    NLightSensors++;
-  }
-
   void Skribot::AddLineSensor(int pinL,int id){
     LineSensor *lsensor = new LineSensor(pinL,id);
     LineSensors[NLineSensors] =  lsensor;
@@ -150,11 +144,33 @@ void Skribot::AddDCRotor(int SpeedPin,int DirectionPin, String Side){
           #endif
     }
 
-    void Skribot::ConfigureSPIHandler(byte SPI_PORT){
-    
+  void Skribot::AddAbstractDevice(byte pin,byte device_type, byte device_id){
+          Abstract_Device *tmp = new Abstract_Device(pin,device_type,device_id);
+          Devices[NABSDevices] = tmp;
+          NABSDevices++;
     }
 
-  void Skribot::Add_Mono_LED_matrix(byte SPI_PORT){
+   
+   bool Skribot::AddSPIDevice(uint8_t MOSI_PIN,uint8_t MISO,uint8_t CLK_PIN,uint8_t CS_PIN){
+    bool tmp = SPIHandler::used_spi_bus<2;
+    if(NSPIDevices < 2){
+      SPIcomm[NSPIDevices] = new SPIHandler(MOSI_PIN,MISO,CLK_PIN,CS_PIN);
+      NSPIDevices++;
+    }
+    return(tmp);
+   }
+
+   bool Skribot::AddI2CDevice(byte _SDA_PIN,byte _CLK_PIN,byte addr,uint32_t freq){
+    bool tmp = I2CHandler::used_i2c_bus<2;
+    if(NI2CDevices < 2){
+      I2Ccomm[NI2CDevices] = new I2CHandler(_SDA_PIN,_CLK_PIN,freq);
+      NI2CDevices++;
+      tmp = I2Ccomm[NI2CDevices]->I2Cscan(addr);
+   }
+   return(tmp);
+  }
+
+  bool Skribot::Add_Mono_LED_matrix(byte SPI_PORT){
     if(SPI_PORT <2){
       SPIcomm[SPI_PORT] = new SPIHandler(SPI_PORT);
       LED_Matrixes[SPI_PORT] = new Mono_LED_Matrix(SPIcomm[SPI_PORT]);
@@ -191,11 +207,6 @@ void Skribot::AddDCRotor(int SpeedPin,int DirectionPin, String Side){
     Claws[NClaws] = claw;
     NClaws++;
   }
-  void Skribot::AddScope(int EchoPin,int Trigg,int ServoPin,String Name){
-    Scope *scope = new Scope(EchoPin,Trigg,ServoPin,Name);
-    Scopes[NScopes] = scope;
-    NScopes++;
-  }
 
    void Skribot::AddLED(int pin,String name,byte N_LED){
     RobotLED *led = new RobotLED(pin,name,N_LED);
@@ -209,24 +220,7 @@ void Skribot::AddDCRotor(int SpeedPin,int DirectionPin, String Side){
     NLEDs++;
   }
 
-  void Skribot::SetScopeAngle(String name,int deg){
-    for(int zz = 0; zz < NScopes ; zz++){
-                    if(Scopes[zz]->GetName() == name){
-                      Scopes[zz]->SetAngle(deg);
-                      break;
-                    }
-      }
-  }
 
-    
-  int Skribot::GetScopeDistance(String name){
-    for(int zz = 0; zz < NScopes ; zz++){
-                    if(Scopes[zz]->GetName() == name){
-                      return(Scopes[zz]->GetDistance());
-                      break;
-                    }
-      }
-  }
 
   #endif
 

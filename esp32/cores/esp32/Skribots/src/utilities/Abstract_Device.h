@@ -1,4 +1,4 @@
-#ifndef Absteact_D_H
+#ifndef Abstract_D_H
 #define Abstract_D_H
 #include "Arduino.h"
 #include "PWM_Handler.h"
@@ -12,14 +12,16 @@
 
 class Abstract_Device{
   public:
-    Abstract_Device(byte pins, byte action_id);
+    Abstract_Device(byte pins, byte action_id, byte _id);
     uint32_t 	performChannelAction(byte input = 0);
   	bool 		channel_Init();
     bool    verifyGPIO(byte *table);
+    byte 	GetID();
   private:
   byte channel_pin;
   byte channel_id;
   byte output;
+  byte id;
  };
 
 

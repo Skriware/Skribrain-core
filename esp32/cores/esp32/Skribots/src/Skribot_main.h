@@ -20,8 +20,9 @@
 #include "./utilities/Buzzer.h"
 #include "./utilities/Buttons.h"
 #include "./utilities/SmartRotorSystem.h"
-
+#include "./utilities/Abstract_Device.h"
 #endif
+
 #ifdef _VARIANT_BBC_MICROBIT_
 #include "./utilities/Adafruit_Microbit.h"
 #endif
@@ -152,6 +153,18 @@
 #define CALIB_MOTORS 0
 #define CALIB_LINE_SENSORS 1
 
+#define MAX_HARDWARE     5
+#define MAX_DIST_SENSORS 5
+#define MAX_LINE_SENSORS 5
+#define MAX_CLAWS        2
+#define MAX_LEFT_ROTORS  2
+#define MAX_RIGHT_ROTORS 2
+#define MAX_LEDs         5
+#define MAX_LED_MATRIX   2
+#define MAX_BUZZERS      5
+#define MAX_BUTTONS      5
+#define MAX_ABS_DIV      5
+
   class Skribot
  {
   public:
@@ -163,10 +176,9 @@
     void AddLineSensor(int Pin, String Name); 
     void AddLineSensor(int Pin, int id);
     void AddDCRotor(int SpeedPin,int DirectionPin, String side);
-    void AddLightSensor(int _pin,int id);
-    void AddSpeaker(int _pin,int id);
-    void AddI2CDevice(byte _SDA_PIN,byte _CLK_PIN,uint32_t freq = 100000);
-    void AddSPIDevice(uint8_t MOSI_PIN,uint8_t MISO,uint8_t CLK_PIN,uint8_t CS_PIN);
+
+    bool AddI2CDevice(byte _SDA_PIN,byte _CLK_PIN,byte addr,uint32_t freq = 100000);
+    bool AddSPIDevice(uint8_t MOSI_PIN,uint8_t MISO,uint8_t CLK_PIN,uint8_t CS_PIN);
 
      #ifndef _VARIANT_BBC_MICROBIT_ 
     void AddClaw(int ClawPin,int Arm_Pin, byte id = 0);
@@ -174,9 +186,11 @@
     void AddLED(int Pin,String name,byte N_LED = 1);
     void AddLED(int Pin, int id, byte N_LED  = 1);
 
-    void Add_Mono_LED_matrix(byte SPI_PORT);
+    bool Add_Mono_LED_matrix(byte SPI_PORT);
     void AddBuzzer(byte pin);
     void AddButton(byte pin,byte id);
+    void AddAbstractDevice(byte pin,byte device_type, byte device_id);
+
     void ConfigureSPIHandler(byte SPI_PORT);
     bool EEPROM_EMPTY(int val);
     #endif
@@ -186,11 +200,12 @@
     void AddLED(String SHIELD_SLOT);
     void AddLineSensor(String SHIELD_SLOT);
     void AddDCRotor(String SHIELD_SLOT);
-    void AddClaw();                                               //functions for elements adding when using Skriware shields
+    void AddClaw();  
+                                                 //functions for elements adding when using Skriware shields
     void Set_Line_Sensor_Logic_Border(String id, int line, int noline);
     void wait_And_Check_BLE_Connection(int ms,int interval);
-    void Calibrate_sensors_no_Line();
-    void Calibrate_sensors_Line();
+   
+
     void Move(char Direction,int ms);
     void FaceLeft(int ms = -1);
     void FaceRight(int ms = -1);
@@ -199,12 +214,14 @@
     void MoveForward(int ms = -1);
     void MoveBack(int ms = -1);
     void RawRotorMove(int left,int right);
+
     void Set_Motor_Movment(byte motor_id, byte dir, byte speed,int time = -1);
     void Move_Motor_Forward(byte motor_id,byte speed,int time = -1);
     void Move_Motor_Back(byte motor_id,byte speed,int time = -1);
     void Stop();   
     void Invert_Left_Rotors(bool inv = true);
     void Invert_Right_Rotors(bool inv = true);
+    
     void Scale_Left_Rotors(byte scale);
     void Scale_Right_Rotors(byte scale);
 
@@ -214,7 +231,8 @@
     int ReadDistSensor(String id, int max = 150);
     int ReadDistSensor(int id, int max = 150);
 
-    void Set_Line_Sensor_Logic_Border(int L1_border,int L2_border,int L3_border);
+    uint32_t performDeviceAction(byte device_id,byte input);
+    
     void Configure_Connections(String predef="");
 
                                                                                                 //distance sensor readout
@@ -227,8 +245,11 @@
     bool Check_Board_Version();
     int  Read_EEPROM_INT(byte addr);
     void Write_EEPROM_INT(byte addr,int val);
-    void Save_Calibration_Data(byte data_id);
 
+    void Calibrate_sensors_no_Line();
+    void Calibrate_sensors_Line();
+    void Save_Calibration_Data(byte data_id);
+    void Set_Line_Sensor_Logic_Border(int L1_border,int L2_border,int L3_border);
 
 
     void CloseClaw(byte id = 0);
@@ -246,12 +267,7 @@
     bool LightSensor_Dark(int id);
     bool LightSensor_Bright(int id);
                                                                                                //Light Sensor Functions
-
-    #ifndef _VARIANT_BBC_MICROBIT_
-    void SetScopeAngle(String id, int deg);  
-    int  GetScopeDistance(String id);                                                         //Scope functions
-    #endif
-                                              //BLE FUCKTIONS
+    //BLE
     char BLE_read();                                                        
     void BLE_write(char *msg);
     bool BLE_checkConnection();
@@ -284,14 +300,33 @@
     void AddHardware(char *tag);
     void ClearHardware();
  // private:
-  DistSensor *DistSensors[2] = {NULL};
-  LineSensor *LineSensors[3] = {NULL};
-  Rotor *LeftDCRotors[2] = {NULL};
-  Rotor *RightDCRotors[2] = {NULL};
-  LightSensor *LightSensors[5] = {NULL};
+  DistSensor *DistSensors[MAX_DIST_SENSORS] = {NULL};
+  LineSensor *LineSensors[MAX_LINE_SENSORS] = {NULL};
+  Rotor *LeftDCRotors[MAX_LEFT_ROTORS] = {NULL};
+  Rotor *RightDCRotors[MAX_RIGHT_ROTORS] = {NULL};
+  RobotLED *LEDs[MAX_LEDs] = {NULL};
+  Claw *Claws[MAX_CLAWS] = {NULL};
+  Mono_LED_Matrix *LED_Matrixes[MAX_LED_MATRIX] = {NULL};
+  Buzzer *Buzzers[MAX_BUZZERS] = {NULL};
+  Abstract_Device *Devices[MAX_ABS_DIV] = {NULL};
+
+  byte  NDistSensors,
+        NLEDs,NLineSensors,
+        NLeftDCRotors,
+        NRightDCRotors,
+        NClaws,
+        NABSDevices,
+        NSPIDevices,
+        NI2CDevices;           //counters
+
+  StatusLED *status;
+  SPIHandler *SPIcomm[2];
+  I2CHandler *I2Ccomm[2];
+
   SmartRotor *leftSmartRotor = nullptr;
   SmartRotor *rightSmartRotor = nullptr;
   SmartRotorSystem *smartRotor = nullptr;
+
   bool using_BLE_Connection,
        connection_Break_Reported,
        program_End_Reported,
@@ -304,11 +339,13 @@
        ignore_connection_break,
        eeprom_version_loaded;
   long claw_closed_time,hardware_checksum;
-  moduleType BLE_MODULE_TYPE;
-  StatusLED *status;
-  SPIHandler *SPIcomm[2];
-  I2CHandler *I2Ccomm[2];
-  byte Board_type = 0;
+
+#ifndef _VARIANT_BBC_MICROBIT_
+  BLEModule *BTmodule;
+#endif
+moduleType BLE_MODULE_TYPE;
+
+byte Board_type = 0;
 
 //calibration parameters:
 byte left_invert = 0;
@@ -319,23 +356,13 @@ int L1_b = 1900;
 int L2_b = 1900;
 int L3_b = 1900;
 
-  #ifndef _VARIANT_BBC_MICROBIT_
-  RobotLED *LEDs[5] = {NULL};
-  Claw *Claws[2] = {NULL};
-  Scope *Scopes[3] = {NULL};
-  RGB_LED_Matrix *RGB_Matrix[3] = {NULL};
-  BLEModule *BTmodule;
-  Mono_LED_Matrix *LED_Matrixes[2] = {NULL};
-  Buzzer *Buzzers[5];
-  #endif
-  byte NDistSensors,NLEDs,NLineSensors,NScopes,NLeftDCRotors,NRightDCRotors,NClaws,NLightSensors;           //counters
-  int DCSpeed = 0;
+int DCSpeed = 0;
   
-  #ifdef _VARIANT_BBC_MICROBIT_
+#ifdef _VARIANT_BBC_MICROBIT_
   Adafruit_Microbit_Matrix ledMatrix;
   Adafruit_Microbit_BLESerial BTLESerial;
-  #endif
+#endif
 
- };
+};
 
  #endif

@@ -282,6 +282,7 @@
               }
           break;
           case HARDWARE_SET:
+          Block::robot->ClearHardware();
           tmp = BLE_readwithTIMEOUT();
               while(tmp != '\n' && n_hardware < 10){
                 hardware_types[n_hardware][0] = BLE_readwithTIMEOUT();

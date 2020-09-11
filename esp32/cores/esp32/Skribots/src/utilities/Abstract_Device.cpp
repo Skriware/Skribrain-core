@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include "Abstract_Device.h"
 
 	bool Abstract_Device::verifyGPIO(byte *table){
@@ -36,18 +37,21 @@
 				 pinMode(channel_pin,INPUT);
 			break;
 			case TOUCH:
-				tmp =verifyGPIO(TOUCH_PINS);
+				 tmp =verifyGPIO(TOUCH_PINS);
 			break;	
 		}
 		return(tmp);
 
 	}
 
-	Abstract_Device::Abstract_Device(byte _channel_pin, byte _channel_id){
+	Abstract_Device::Abstract_Device(byte _channel_pin, byte _channel_id, byte _id){
 		channel_pin = _channel_pin;
 		channel_id =  _channel_id;
+		id = _id;
 	}
-
+	byte Abstract_Device::GetID(){
+		return(id);
+	} 
     uint32_t 	Abstract_Device::performChannelAction(byte input){
     	uint32_t output = 0;
     	switch(channel_id){

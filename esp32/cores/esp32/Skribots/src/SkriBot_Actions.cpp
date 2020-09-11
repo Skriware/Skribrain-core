@@ -411,39 +411,6 @@ void Skribot::CloseClaw(byte id){
     void Skribot::MoveBack(int ms){Move('B',ms);}
     void Skribot::Stop(){Move('S',-1);}
 
-  int Skribot::LightSensor_Raw(int id){
-    int output;
-    for(int zz = 0; zz < NLightSensors ; zz++){
-                    if(LightSensors[zz]->GetID() == id){
-                      output = LightSensors[zz]->ReadRaw();
-                      break;
-                    }
-                  
-      }
-      return(output);
-     }
-    bool Skribot::LightSensor_Dark(int id){
-          bool output;
-    for(int zz = 0; zz < NLightSensors ; zz++){
-                    if(LightSensors[zz]->GetID() == id){
-                      output = LightSensors[zz]->isDark();
-                      break;
-                    }
-                  
-      }
-      return(output);
-    }
-    bool Skribot::LightSensor_Bright(int id){
-          bool output;
-    for(int zz = 0; zz < NLightSensors ; zz++){
-                    if(LightSensors[zz]->GetID() == id){
-                      output = LightSensors[zz]->isBright();
-                      break;
-                    }
-                  
-      }
-      return(output);
-    }
 
     void Skribot::SetLEDColor(int color_id){
       switch(color_id){

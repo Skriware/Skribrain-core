@@ -186,15 +186,53 @@ void Skribot::AddHardware(char *tag){
 
 void Skribot::ClearHardware(){
   DEBUG_PRINT("CLEAR HDW");
-  for(byte tt = 0; tt < 2; tt++){
-    if (DistSensors[tt] !=NULL)delete DistSensors[tt];
-    if (LED_Matrixes[tt] !=NULL)delete LED_Matrixes[tt];
-    if (LeftDCRotors[tt] !=NULL)delete LeftDCRotors[tt];
-    if (RightDCRotors[tt] !=NULL)delete RightDCRotors[tt];
-    if (LineSensors[tt] !=NULL)delete LineSensors[tt];
-    if (Claws[tt] != NULL)delete Claws[tt];
-    if (LEDs[tt] != NULL)delete LEDs[tt];
+
+  if(SPIcomm[0] != NULL)delete SPIcomm[0];
+  if(SPIcomm[1] != NULL)delete SPIcomm[1];
+  if(I2Ccomm[0] != NULL)delete I2Ccomm[0];
+  if(I2Ccomm[1] != NULL)delete I2Ccomm[1];
+
+  for(byte tt = 0; tt < MAX_HARDWARE; tt++){
+    if(tt < MAX_LED_MATRIX    && LED_Matrixes[tt]   !=NULL) delete LED_Matrixes[tt]  ;
+    if(tt < MAX_LEFT_ROTORS   && LeftDCRotors[tt]   !=NULL) delete LeftDCRotors[tt]  ;
+    if(tt < MAX_RIGHT_ROTORS  && RightDCRotors[tt]  !=NULL) delete RightDCRotors[tt] ;
+    if(tt < MAX_DIST_SENSORS  && DistSensors[tt]    !=NULL) delete DistSensors[tt]   ;
+    if(tt < MAX_LINE_SENSORS   && LineSensors[tt]   !=NULL) delete LineSensors[tt]   ;
+    if(tt < MAX_LEDs          && LEDs[tt]           !=NULL) delete LEDs[tt]          ;
+    if(tt < MAX_CLAWS         && Claws[tt]          !=NULL) delete Claws[tt]         ;
+    if(tt < MAX_BUZZERS       && Buzzers[tt]        !=NULL) delete Buzzers[tt]       ;
+    if(tt < MAX_ABS_DIV       && Devices[tt]        !=NULL) delete Devices[tt]       ;
   }
+
+
+  SPIcomm[0] = NULL;
+  SPIcomm[1] = NULL;
+  I2Ccomm[0] = NULL;
+  I2Ccomm[1] = NULL;
+
+  for(byte tt = 0; tt < MAX_HARDWARE; tt++){
+    if(tt < MAX_LED_MATRIX)   LED_Matrixes[tt]  =NULL;
+    if(tt < MAX_LEFT_ROTORS)  LeftDCRotors[tt]  =NULL;
+    if(tt < MAX_RIGHT_ROTORS) RightDCRotors[tt] =NULL;
+    if(tt < MAX_DIST_SENSORS) DistSensors[tt]   =NULL;
+    if(tt < MAX_LINE_SENSORS) LineSensors[tt]   =NULL;
+    if(tt < MAX_LEDs)         LEDs[tt]          =NULL;
+    if(tt < MAX_CLAWS)        Claws[tt]         =NULL;
+    if(tt < MAX_BUZZERS)      Buzzers[tt]       =NULL;
+    if(tt < MAX_ABS_DIV)      Devices[tt]       =NULL;
+  }
+
+  NDistSensors    = 0;
+  NLEDs           = 0;
+  NLineSensors    = 0;
+  NLeftDCRotors   = 0;
+  NRightDCRotors  = 0;
+  NClaws          = 0;
+  NABSDevices     = 0;
+  NSPIDevices     = 0;
+  NI2CDevices     = 0;
+  clearPWM();
+
   if (smartRotor != nullptr)
   {
     DEBUG_PRINT("deleting smart rotor system");
@@ -218,34 +256,10 @@ void Skribot::ClearHardware(){
     rightSmartRotor = nullptr;
   }
 
-  for(byte rr = 0;rr<5;rr++){
-    delete Buzzers[rr];
-  }
-  for(byte tt = 0; tt < 2; tt++){
-      DistSensors[tt]=NULL;
-      LED_Matrixes[tt]=NULL;
-      LeftDCRotors[tt]=NULL;
-      RightDCRotors[tt]=NULL;
-      LineSensors[tt]=NULL;
-      Claws[tt] = NULL;
-      LEDs[tt] =NULL;
-    }
-    for(byte rr = 0;rr<5;rr++){
-      Buzzers[rr]=NULL;
-    }
-  NDistSensors = 0;
-  NLeftDCRotors = 0;
-  NRightDCRotors = 0;
-  NLineSensors = 0;
-  NClaws = 0;
-  NLEDs = 0;
-  clearPWM();
+ 
 
-  for (int i = 0; i < 2; i++)
-  {
-    delete SPIcomm[i];
-    SPIcomm[i] = nullptr;
-  }
+
+  hardware_checksum = 0;
   Serial.println("DELETED");
 }
 
