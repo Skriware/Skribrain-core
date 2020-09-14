@@ -298,6 +298,7 @@
     void ExitConfigMode();
 
     void AddHardware(char *tag);
+    void AddHardware(byte *tag);
     void ClearHardware();
  // private:
   DistSensor *DistSensors[MAX_DIST_SENSORS] = {NULL};

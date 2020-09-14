@@ -138,3 +138,11 @@
     uint32_t SPIHandler::SPI_get_output(byte ii){
       return(output[ii]);
     }
+
+    uint8_t SPIHandler::GetID(){
+      return (ID);
+    }
+
+    void SPIHandler::SetID(uint8_t _id){
+      ID = _id;
+    }

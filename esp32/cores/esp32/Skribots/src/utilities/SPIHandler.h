@@ -38,6 +38,8 @@ public:
 	  uint32_t SPI_get_output(uint8_t ii);
 	  uint8_t get_SPIPORT();
 	  void SPI_end();
+	  uint8_t GetID();
+	  void SetID(uint8_t _id);
 	  static uint8_t used_spi_bus;
 	  uint32_t output[16];
 private:
@@ -45,7 +47,8 @@ private:
 	uint8_t MOSI_PIN;
 	uint8_t MISO_PIN;
 	uint8_t CLK_PIN;
-	uint8_t SPI_PORT; 
+	uint8_t SPI_PORT;
+	uint8_t ID; 
 	#endif
 	uint8_t CS_PIN;
 	const uint8_t buffer_Size = 16;

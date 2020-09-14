@@ -170,17 +170,17 @@ void Skribot::AddDCRotor(int SpeedPin,int DirectionPin, String Side){
    return(tmp);
   }
 
-  bool Skribot::Add_Mono_LED_matrix(byte SPI_PORT){
-    if(SPI_PORT <2){
-      SPIcomm[SPI_PORT] = new SPIHandler(SPI_PORT);
-      LED_Matrixes[SPI_PORT] = new Mono_LED_Matrix(SPIcomm[SPI_PORT]);
+  bool Skribot::Add_Mono_LED_matrix(uint8_t MOSI_PIN,uint8_t MISO_PIN,uint8_t CLK_PIN,uint8_t CS_PIN,uint8_t id){
+    if(NSPIDevices <2){
+      SPIcomm[NSPIDevices] = new SPIHandler(MOSI_PIN,MISO_PIN,CLK_PIN,CS_PIN);
+      LED_Matrixes[NSPIDevices] = new Mono_LED_Matrix(SPIcomm[NSPIDevices]);
     }
-    SPIcomm[SPI_PORT]->set_SPI_Settings(4000000, MSBFIRST, SPI_MODE0);
-    SPIcomm[SPI_PORT]->set_SPI_bit_format(16);
+    SPIcomm[NSPIDevices]->set_SPI_Settings(4000000, MSBFIRST, SPI_MODE0);
+    SPIcomm[NSPIDevices]->set_SPI_bit_format(16);
 
-    LED_Matrixes[SPI_PORT]->Init();
-    LED_Matrixes[SPI_PORT]->SetIntensity(8);
-    LED_Matrixes[SPI_PORT]->Update();
+    LED_Matrixes[NSPIDevices]->Init();
+    LED_Matrixes[NSPIDevices]->SetIntensity(8);
+    LED_Matrixes[NSPIDevices]->Update();
 
          
   }
