@@ -186,7 +186,8 @@
     void AddLED(int Pin,String name,byte N_LED = 1);
     void AddLED(int Pin, int id, byte N_LED  = 1);
 
-    bool Add_Mono_LED_matrix(byte SPI_PORT);
+    bool Add_Mono_LED_matrix(byte id){ return(true);};
+    bool Add_Mono_LED_matrix(uint8_t MOSI_PIN,uint8_t MISO_PIN,uint8_t CLK_PIN,uint8_t CS_PIN,uint8_t id);
     void AddBuzzer(byte pin);
     void AddButton(byte pin,byte id);
     void AddAbstractDevice(byte pin,byte device_type, byte device_id);

@@ -283,6 +283,7 @@
           break;
           case HARDWARE_SET:
           tmp = BLE_readwithTIMEOUT();
+                /*
                 while(tmp != '\n' && n_hardware < 10){
                 hardware_types[n_hardware][0] = (byte)BLE_readwithTIMEOUT();
                 byte n_pins = 5 >> (hardware_types[n_hardware][0] & B11100000);
@@ -303,9 +304,9 @@
               }else{
                 Serial.println("Now Hardware changes.");
               }
-              
+              */
 
-              /*
+              
                while(tmp != '\n' && n_hardware < 10){
                 hardware_types[n_hardware][0] = BLE_readwithTIMEOUT();
                 hardware_types[n_hardware][1] = BLE_readwithTIMEOUT();
@@ -321,7 +322,7 @@
               }else{
                 Serial.println("Now Hardware changes.");
               }
-              */
+              
 
           break;
           case CALIBRATE:
