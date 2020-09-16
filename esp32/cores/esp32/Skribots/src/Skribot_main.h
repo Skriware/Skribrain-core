@@ -177,8 +177,8 @@
     void AddLineSensor(int Pin, int id);
     void AddDCRotor(int SpeedPin,int DirectionPin, String side);
 
-    bool AddI2CDevice(byte _SDA_PIN,byte _CLK_PIN,byte addr,uint32_t freq = 100000);
-    bool AddSPIDevice(uint8_t MOSI_PIN,uint8_t MISO,uint8_t CLK_PIN,uint8_t CS_PIN);
+    bool AddI2CDevice(byte _SDA_PIN,byte _CLK_PIN,byte addr,byte id,uint32_t freq = 100000);
+    bool AddSPIDevice(uint8_t MOSI_PIN,uint8_t MISO,uint8_t CLK_PIN,uint8_t CS_PIN,byte id);
 
      #ifndef _VARIANT_BBC_MICROBIT_ 
     void AddClaw(int ClawPin,int Arm_Pin, byte id = 0);
@@ -188,9 +188,9 @@
 
     bool Add_Mono_LED_matrix(byte id){ return(true);};
     bool Add_Mono_LED_matrix(uint8_t MOSI_PIN,uint8_t MISO_PIN,uint8_t CLK_PIN,uint8_t CS_PIN,uint8_t id);
-    void AddBuzzer(byte pin);
+    void AddBuzzer(byte pin,byte id);
     void AddButton(byte pin,byte id);
-    void AddAbstractDevice(byte pin,byte device_type, byte device_id);
+    bool AddAbstractDevice(byte pin,byte device_type, byte device_id);
 
     void ConfigureSPIHandler(byte SPI_PORT);
     bool EEPROM_EMPTY(int val);
@@ -299,8 +299,9 @@
     void ExitConfigMode();
 
     void AddHardware(char *tag);
-    void AddHardware(byte *tag);
+    bool AddHardware(byte *tag);
     void ClearHardware();
+    byte getPinN_for_hardware(char id);
  // private:
   DistSensor *DistSensors[MAX_DIST_SENSORS] = {NULL};
   LineSensor *LineSensors[MAX_LINE_SENSORS] = {NULL};

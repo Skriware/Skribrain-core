@@ -489,6 +489,23 @@ size_t tmp_n;
         UserFunction_1();
         break;
         **/ 
+    case 94:
+        Block::robot->I2Ccomm[used_blocks[0]->get_output()]->SetFreq(used_blocks[1]->get_output());
+        break;
+    case 95:
+        Block::robot->SPIcomm[used_blocks[0]->get_output()]->set_SPI_Settings(used_blocks[1]->get_output(),used_blocks[2]->get_output(),used_blocks[3]->get_output());
+        break;
+    case 96:
+        Block::robot->I2Ccomm[used_blocks[0]->get_output()]->I2CTransfer(used_blocks[1]->get_table_output_8());
+        if(used_blocks[3] != NULL)used_blocks[3]->set_output(Block::robot->I2Ccomm[used_blocks[0]->get_output()]->output_buffer[used_blocks[2]->get_output()]);
+        break;
+    case 97:
+        Block::robot->SPIcomm[used_blocks[0]->get_output()]->SPITransfer(used_blocks[1]->get_table_output_8());
+        if(used_blocks[3] != NULL)used_blocks[3]->set_output(Block::robot->SPIcomm[used_blocks[0]->get_output()]->output[used_blocks[2]->get_output()]);
+        break;
+    case 98:
+        used_blocks[2]->set_output(Block::robot->Devices[used_blocks[0]->get_output()]->performChannelAction(used_blocks[1]->get_output()));
+        break;
     case 99:
         Block::robot->RawRotorMove(used_blocks[0]->get_output(),used_blocks[1]->get_output());
         Block::robot->Remote_block_used = true;

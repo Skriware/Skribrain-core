@@ -72,7 +72,7 @@ public:
 	int freeRam();
 	int cti(char c);
 	int32_t readInt();
-	int32_t readIntDirect();
+	int32_t readIntDirect(byte max_d = 10);
 	char BLE_readwithTIMEOUT();
 	byte* readMultipleInts(byte *n);
 	int32_t* readMultipleInts32(byte *N);																							//BT message parsing help functions
@@ -80,7 +80,7 @@ public:
 	void ReadfromBT();	
 	void clear();	
 	void init();
-	int portUID(char portID);																					// BT message hendler												
+	int portUID(byte portID);																					// BT message hendler												
 
 	bool runCode,transfereBlocks;
 

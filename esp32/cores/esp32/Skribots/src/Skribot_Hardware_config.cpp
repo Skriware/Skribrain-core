@@ -144,56 +144,51 @@ void Skribot::AddDCRotor(int SpeedPin,int DirectionPin, String Side){
           #endif
     }
 
-  void Skribot::AddAbstractDevice(byte pin,byte device_type, byte device_id){
+  bool Skribot::AddAbstractDevice(byte pin,byte device_type, byte device_id){
           Abstract_Device *tmp = new Abstract_Device(pin,device_type,device_id);
-          Devices[NABSDevices] = tmp;
+          Devices[device_id] = tmp;
           NABSDevices++;
+          return(Devices[device_id]->channel_Init());
     }
 
    
-   bool Skribot::AddSPIDevice(uint8_t MOSI_PIN,uint8_t MISO,uint8_t CLK_PIN,uint8_t CS_PIN){
+   bool Skribot::AddSPIDevice(uint8_t MOSI_PIN,uint8_t MISO,uint8_t CLK_PIN,uint8_t CS_PIN,byte id){
     bool tmp = SPIHandler::used_spi_bus<2;
     if(NSPIDevices < 2){
-      SPIcomm[NSPIDevices] = new SPIHandler(MOSI_PIN,MISO,CLK_PIN,CS_PIN);
+      SPIcomm[id] = new SPIHandler(MOSI_PIN,MISO,CLK_PIN,CS_PIN);
       NSPIDevices++;
     }
     return(tmp);
    }
 
-   bool Skribot::AddI2CDevice(byte _SDA_PIN,byte _CLK_PIN,byte addr,uint32_t freq){
+   bool Skribot::AddI2CDevice(byte _SDA_PIN,byte _CLK_PIN,byte addr,byte id,uint32_t freq){
     bool tmp = I2CHandler::used_i2c_bus<2;
     if(NI2CDevices < 2){
-      I2Ccomm[NI2CDevices] = new I2CHandler(_SDA_PIN,_CLK_PIN,freq);
+      I2Ccomm[id] = new I2CHandler(_SDA_PIN,_CLK_PIN,freq);
       NI2CDevices++;
-      tmp = I2Ccomm[NI2CDevices]->I2Cscan(addr);
+      tmp = I2Ccomm[id]->I2Cscan(addr);
    }
    return(tmp);
   }
 
   bool Skribot::Add_Mono_LED_matrix(uint8_t MOSI_PIN,uint8_t MISO_PIN,uint8_t CLK_PIN,uint8_t CS_PIN,uint8_t id){
+     bool tmp = SPIHandler::used_spi_bus<2;
     if(NSPIDevices <2){
       SPIcomm[NSPIDevices] = new SPIHandler(MOSI_PIN,MISO_PIN,CLK_PIN,CS_PIN);
-      LED_Matrixes[NSPIDevices] = new Mono_LED_Matrix(SPIcomm[NSPIDevices]);
+      LED_Matrixes[id] = new Mono_LED_Matrix(SPIcomm[NSPIDevices]);
     }
     SPIcomm[NSPIDevices]->set_SPI_Settings(4000000, MSBFIRST, SPI_MODE0);
     SPIcomm[NSPIDevices]->set_SPI_bit_format(16);
 
-    LED_Matrixes[NSPIDevices]->Init();
-    LED_Matrixes[NSPIDevices]->SetIntensity(8);
-    LED_Matrixes[NSPIDevices]->Update();
-
-         
+    LED_Matrixes[id]->Init();
+    LED_Matrixes[id]->SetIntensity(8);
+    LED_Matrixes[id]->Update();
+    NSPIDevices++;
+    return(tmp);
   }
-  void Skribot::AddBuzzer(byte BUZZER_PIN){
+  void Skribot::AddBuzzer(byte BUZZER_PIN, byte id){
   #ifdef ESP_H 
-    if(BUZZER_PIN == SERVO_1){
-        Buzzers[SERVO_1] = new Buzzer(SKRIBRAIN_SERVO_PIN_1);
-    }else if(BUZZER_PIN == SERVO_2){
-        switch(Board_type){
-        case 1: Buzzers[SERVO_2] = new Buzzer(SKRIBRAIN_SERVO_PIN_2); break;
-        case 2: Buzzers[SERVO_2] = new Buzzer(SKRIBRAIN_SERVO_PIN_3); break;
-        }
-    }
+    Buzzers[id] = new Buzzer(BUZZER_PIN);
   #else
     Buzzers[0] = new Buzzer(13);
   #endif

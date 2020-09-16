@@ -18,6 +18,7 @@ public:
 	  bool I2CTransfer(byte *msg,byte addr = 0);
 	  uint8_t I2C_get_output(byte ii);
 	  void I2C_end();
+	  void SetFreq(uint32_t _freq);
 	  uint8_t output_buffer[16];  
 	  static uint8_t used_i2c_bus;
 private:

@@ -1,9 +1,9 @@
 	#include "BlockHandler.h"
 
 
-  int BlockHandler::portUID(char portid){
+  int BlockHandler::portUID(byte portid){
         int primes[] = {2,3,5,7,11,13,17,19,23};
-        return(primes[cti(portid)]);
+        return(primes[portid]);
   }
 
   bool BlockHandler::AddToMessage(char x){
@@ -128,10 +128,11 @@
         char tmpNameArray[32] = {' '};
         int tmpCounter;
         char tmp_tag[10] = {' '};
-        byte hardware_types[10][5] = {{' '},{' '}};
+        byte hardware_types[10][6] = {{' '},{' '}};
         int n_hardware = 0;
         bool vaildcommand = true;
         int tmp_checksum = 0;
+        byte n_pins;
         switch(LineCode){
           case BAPTISED:
                 #if ENABLED(DEBUG_MODE)
@@ -219,7 +220,7 @@
           Block::robot->BLE_write(tmp_tag);
           break;
           case PIANO:
-              if(Block::robot->Buzzers[SERVO_2] == NULL)Block::robot->AddBuzzer(SERVO_2);
+              if(Block::robot->Buzzers[SERVO_2] == NULL)Block::robot->AddBuzzer(SKRIBRAIN_SERVO_PIN_2,SERVO_2);
               switch(readIntDirect()){
                       case 0:
                         if (Block::robot->Buzzers[SERVO_2] != NULL)
@@ -282,20 +283,23 @@
               }
           break;
           case HARDWARE_SET:
-          tmp = BLE_readwithTIMEOUT();
-                /*
-                while(tmp != '\n' && n_hardware < 10){
-                hardware_types[n_hardware][0] = (byte)BLE_readwithTIMEOUT();
-                byte n_pins = 5 >> (hardware_types[n_hardware][0] & B11100000);
-                byte device_id = hardware_types[n_hardware][0] & B00011111;
-                hardware_types[n_hardware][0] = device_id;
-                for(byte yy = 1; yy < n_pins+1;yy++){
-                  hardware_types[n_hardware][yy] = (byte)BLE_readwithTIMEOUT();
-                  tmp_checksum += cti(hardware_types[n_hardware][yy])*portUID(hardware_types[n_hardware][0])
-                }
-                n_hardware++;
                 tmp = BLE_readwithTIMEOUT();
-              }
+                while(true){
+                tmp = BLE_readwithTIMEOUT();
+                if(tmp == '\n' || n_hardware == 10)break;
+                hardware_types[n_hardware][0] = (byte)tmp;
+                n_pins = Block::robot->getPinN_for_hardware(hardware_types[n_hardware][0]);
+                hardware_types[n_hardware][1] = (byte)readIntDirect();
+                Serial.print("pins to get:");
+                Serial.println(n_pins);
+                for(byte yy = 2; yy < n_pins+2;yy++){
+                  Serial.print("pin:");
+                  hardware_types[n_hardware][yy] = readIntDirect();
+                  Serial.println(hardware_types[n_hardware][yy]);
+                }
+                tmp_checksum += hardware_types[n_hardware][0]*portUID(n_hardware);
+                n_hardware++;
+                }
               if(tmp_checksum != Block::robot->hardware_checksum){
                 Block::robot->ClearHardware();
                 for(byte tt = 0; tt< n_hardware;tt++)Block::robot->AddHardware(hardware_types[tt]);
@@ -304,9 +308,9 @@
               }else{
                 Serial.println("Now Hardware changes.");
               }
-              */
-
               
+
+              /*
                while(tmp != '\n' && n_hardware < 10){
                 hardware_types[n_hardware][0] = BLE_readwithTIMEOUT();
                 hardware_types[n_hardware][1] = BLE_readwithTIMEOUT();
@@ -322,7 +326,7 @@
               }else{
                 Serial.println("Now Hardware changes.");
               }
-              
+              */
 
           break;
           case CALIBRATE:
@@ -402,14 +406,14 @@
       return(asciTmp);
 }
 
-  int32_t BlockHandler::readIntDirect(){
+  int32_t BlockHandler::readIntDirect(byte max_d){
   int nDigits = 0;
   int sign = 1;
   byte cursor = 0;
   char tmp;
   char msg[10];
   tmp = BLE_readwithTIMEOUT();
-  while(tmp != ' ' && tmp != '\n'){
+  while(tmp != ' ' && tmp != '\n' && tmp < 250){
     msg[cursor+nDigits] = tmp;
     tmp = BLE_readwithTIMEOUT();
     nDigits++;

@@ -32,6 +32,11 @@
 	  	delete i2c;
 	  }
 
+    void I2CHandler::SetFreq(uint32_t _freq){
+      delete i2c;
+      i2c->begin(SDA_PIN,CLK_PIN,_freq);
+    }
+
 	  bool I2CHandler::I2Cscan(uint8_t address_to_find){
 	  	bool address_found =  false;
 	  	byte error;
