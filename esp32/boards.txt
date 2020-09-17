@@ -1,5 +1,4 @@
 menu.UploadSpeed=Upload Speed
-menu.CPUFreq=CPU Frequency
 menu.FlashFreq=Flash Frequency
 menu.FlashMode=Flash Mode
 menu.FlashSize=Flash Size
@@ -7,11 +6,13 @@ menu.PartitionScheme=Partition Scheme
 menu.DebugLevel=Core Debug Level
 menu.PSRAM=PSRAM
 
+##############################################################
+
 Skribrain.name=Skribrain
 
 Skribrain.vid.0=0x0403
 Skribrain.pid.0=0x6015
-Skribrain.upload.tool=esptool
+Skribrain.upload.tool=esptool_py
 Skribrain.upload.maximum_size=1310720
 Skribrain.upload.maximum_data_size=294912
 Skribrain.upload.wait_for_upload_port=true
@@ -93,4 +94,5 @@ Skribrain.menu.DebugLevel.debug=Debug
 Skribrain.menu.DebugLevel.debug.build.code_debug=4
 Skribrain.menu.DebugLevel.verbose=Verbose
 Skribrain.menu.DebugLevel.verbose.build.code_debug=5
+
 
