@@ -198,6 +198,8 @@ void Skribot::AddDCRotor(int SpeedPin,int DirectionPin, String Side){
   #ifndef _VARIANT_BBC_MICROBIT_
 
   void Skribot::AddClaw(int Claw_Pin, int Arm_Pin, byte id){
+    Check_Board_Version();
+    if(Board_type == 1)Claw_Pin = 13;
     Claw *claw = new Claw(Claw_Pin,Arm_Pin,id);
     Claws[NClaws] = claw;
     NClaws++;

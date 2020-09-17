@@ -128,7 +128,7 @@
         char tmpNameArray[32] = {' '};
         int tmpCounter;
         char tmp_tag[10] = {' '};
-        byte hardware_types[10][6] = {{' '},{' '}};
+        byte hardware_types[15][6] = {{' '},{' '}};
         int n_hardware = 0;
         bool vaildcommand = true;
         int tmp_checksum = 0;
@@ -286,7 +286,9 @@
                 tmp = BLE_readwithTIMEOUT();
                 while(true){
                 tmp = BLE_readwithTIMEOUT();
-                if(tmp == '\n' || n_hardware == 10)break;
+
+                if(tmp == '\n' || n_hardware == 15)break;
+                if(tmp == ' ')tmp = BLE_readwithTIMEOUT();
                 hardware_types[n_hardware][0] = (byte)tmp;
                 n_pins = Block::robot->getPinN_for_hardware(hardware_types[n_hardware][0]);
                 hardware_types[n_hardware][1] = (byte)readIntDirect();
@@ -302,7 +304,7 @@
                 }
               if(tmp_checksum != Block::robot->hardware_checksum){
                 Block::robot->ClearHardware();
-                for(byte tt = 0; tt< n_hardware;tt++)Block::robot->AddHardware(hardware_types[tt]);
+                for(byte tt = 0; tt< n_hardware+1;tt++)Block::robot->AddHardware(hardware_types[tt]);
                 Block::robot->hardware_checksum = tmp_checksum;  
                 Serial.println("HARDWARE SET");
               }else{

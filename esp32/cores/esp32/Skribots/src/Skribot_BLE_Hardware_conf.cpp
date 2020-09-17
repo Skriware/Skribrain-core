@@ -102,14 +102,14 @@ bool Skribot::AddHardware(byte *tag){
       } 
     #endif
       break;
-      caseCASE_ROTOR:
+      case CASE_ROTOR:
       DEBUG_PRINT("ROTOR");
         switch(tag[1]){
           case 1:
-              AddDCRotor(tag[2],tag[3],"Left");
+              AddDCRotor(tag[3],tag[2],"Left");
           break;
           case 2:
-              AddDCRotor(tag[2],tag[3],"Right");
+              AddDCRotor(tag[3],tag[2],"Right");
           break;
           default:
           break;
@@ -125,7 +125,7 @@ bool Skribot::AddHardware(byte *tag){
     break;
     case CASE_CLAW:
         DEBUG_PRINT("CLAW");
-          AddClaw(tag[2],tag[3],tag[1]);
+          AddClaw(tag[3],tag[2],tag[1]);
     break;
     case CASE_LINE:
         DEBUG_PRINT("LINE");
