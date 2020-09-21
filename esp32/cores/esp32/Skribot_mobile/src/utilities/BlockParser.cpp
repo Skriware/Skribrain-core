@@ -1,4 +1,5 @@
 	#include "BlockHandler.h"
+  #include "../Skribot_mobile.h"
 
 
   int BlockHandler::portUID(byte portid){
@@ -165,7 +166,7 @@
                 #if ENABLED(DEBUG_MODE)
                   Serial.println("Version Request");
                 #endif
-                sprintf(tmp_tag,"VERSION:%f",1.0);
+                sprintf(tmp_tag,"VERSION:%f",FIRMWARE_VERSION);
                 Block::robot->BLE_write(tmp_tag);
                 clear();
           break;

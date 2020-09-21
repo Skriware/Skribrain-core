@@ -80,7 +80,7 @@
 
 #else
 
-#define BOARD_VERSION 1
+#define BOARD_VERSION 2
 //#define FORCE_BOARD_VERSION_1
 //#define FORCE_BOARD_VERSION_2
 
