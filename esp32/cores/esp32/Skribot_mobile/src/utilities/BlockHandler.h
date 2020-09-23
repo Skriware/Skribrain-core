@@ -11,11 +11,13 @@
 
 #define INVALID_MSG_ERROR_CODE 255
 #define TIMEOUT_ERROR_CODE 254
-#define MESSAGE_TIMEOUT 500
-#define ACK_RESEND_TIME 100
+#define MESSAGE_TIMEOUT 2000
+#define ACK_RESEND_TIME 20
+#define AFTER_TIMOUT_DELAY_INCREASE 20
 #define NO_MSG_CODE '0'
 #define CODE_COMPLETE 2
 #define CODE_PASSED 1
+#define MAX_ACK_RESENT_TIME 300
 
 //Line Tags
 #define BAPTISED 'b'
@@ -83,6 +85,7 @@ public:
 	int portUID(byte portID);																					// BT message hendler												
 
 	bool runCode,transfereBlocks;
+	int ack_resend_time;
 
 	 #define blockList_MAX 			300
 	 #define IfblockList_MAX 		50

@@ -2,6 +2,7 @@
 
 	BlockHandler::BlockHandler(){
 		init();
+    ack_resend_time = ACK_RESEND_TIME;
 	}
 
 	void BlockHandler::init(){

@@ -89,7 +89,7 @@ void SendCodeEndMEssage(){
         if(!Connection_Break){
           robot->ProgramENDRepotred();
           if(!robot->Remote_block_used){
-            robot->wait_And_Check_BLE_Connection(500,20);
+            robot->wait_And_Check_BLE_Connection(200,20);
             robot->BLE_write("DONE\n");
           }else{
             robot->Remote_block_used = false;

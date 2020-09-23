@@ -8,6 +8,7 @@
 	input = int_input;
 	if(int_type == BUTTON_INTERRUPT){			//mapping for SKRIBRAIN
 		switch(input){
+			#ifdef ESP_H
 			case BUTTON_1:
 				input = SKRIBRAIN_ANALOG_PIN_1;
 			break;
@@ -17,8 +18,9 @@
 			case BUTTON_3:
 				input = SKRIBRAIN_ANALOG_PIN_3;
 			break;
+			#endif
 			default:
-				input = SKRIBRAIN_ANALOG_PIN_1;
+				input;
 			break;
 		}
 	}
@@ -58,13 +60,7 @@
 				}
  			break;
  			case DISTANCE_INTERRUPT:
- 				if(input == DIST_D1){
- 					distance = robot->ReadDistSensor(1);
- 				}else if(input == DIST_D2){
- 					distance = robot->ReadDistSensor(2);
- 				}else{
- 					return(false);
- 				}
+ 				distance = robot->ReadDistSensor(input);
  				switch(trigger_type){
  					case DISTANCE_GRATER_THEN:
  						return(distance > value);
@@ -86,7 +82,6 @@
  				}else{
  					return(false);
  				}
- 				//Serial.println(robot->ReadLineSensor(input));
  				return(robot->ReadLineSensor(input) == line_trig);
  			break; 
  			case TIME_INTERRUPT :
@@ -105,7 +100,7 @@
 			return(false);
 	}
 	bool InterruptHandler::Condition_saniti_check(){
-		if(interrupt_type == BUTTON_INTERRUPT){
+	/*	if(interrupt_type == BUTTON_INTERRUPT){
 			if(input == SKRIBRAIN_ANALOG_PIN_1 || input == SKRIBRAIN_ANALOG_PIN_2 || input == SKRIBRAIN_ANALOG_PIN_3){
 				if(trigger_type == BUTTON_PRESSED || trigger_type == BUTTON_HOLD){
 					buttonEnable(input);
@@ -132,7 +127,8 @@
 		#ifdef DEBUG_MODE
 			Serial.println("Interrupt condition invalid");
 		#endif
-		return(false);
+		*/
+		return(true);
 	}
 	byte InterruptHandler::get_start_block_id(){
 		return(starting_block_id);

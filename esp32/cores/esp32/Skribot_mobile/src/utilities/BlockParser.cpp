@@ -56,14 +56,14 @@
             bool tmp = false;
             long last_message_time = millis();
             long last_ack_send = last_message_time;
+            delay(ack_resend_time);
             Block::robot->BLE_write("ack\n");
             while((Block::robot->BLE_dataAvailable() == 0)){
               if(millis() - last_message_time > MESSAGE_TIMEOUT){
                 tmp = true;
+                if(ack_resend_time < MAX_ACK_RESENT_TIME)ack_resend_time += AFTER_TIMOUT_DELAY_INCREASE;
                 break;
-              }else if(millis() - last_ack_send > ACK_RESEND_TIME){
-                Block::robot->BLE_write("ack\n");
-                last_ack_send = millis();
+                
               }
             }
             return(tmp);
@@ -99,17 +99,12 @@
     asciTmp = '0';
     if(Block::robot->BLE_dataAvailable()){
       MainAsci = Block::robot->BLE_read();                                 //Reading first character of the message 255-error Code
-      AddToMessage(MainAsci);
-      if(MainAsci == 'R'){
-        while(Block::robot->BLE_dataAvailable())AddToMessage(Block::robot->BLE_read());
-        transfereBlocks = false;
-        return(CODE_COMPLETE);
-      }
+      AddToMessage(MainAsci);  
       asciTmp = MainAsci;
     while(asciTmp != '\n'){
           if(Block::robot->BLE_dataAvailable()){
             asciTmp = Block::robot->BLE_read();
-            AddToMessage(asciTmp);
+            AddToMessage(asciTmp); 
           }else{
             if(CheckForTimeout()){
               transfereBlocks = false;  
@@ -120,6 +115,10 @@
     }else{
       CheckForTimeout();
       return(NO_MSG_CODE);
+    }
+    if(MainAsci == 'R'){
+        transfereBlocks = false;
+        return(CODE_COMPLETE);
     }
     if(!(messageLength < MAX_MSG_L))return(CODE_TOO_LONG);
     return(CODE_PASSED);
