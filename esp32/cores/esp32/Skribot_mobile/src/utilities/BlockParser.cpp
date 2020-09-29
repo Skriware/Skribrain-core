@@ -53,6 +53,7 @@
   }
 
   bool BlockHandler::CheckForTimeout(){
+            sei();
             bool tmp = false;
             long last_message_time = millis();
             long last_ack_send = last_message_time;
@@ -101,6 +102,11 @@
       MainAsci = Block::robot->BLE_read();                                 //Reading first character of the message 255-error Code
       AddToMessage(MainAsci);  
       asciTmp = MainAsci;
+    if(MainAsci == 'R'){
+      while(Block::robot->BLE_dataAvailable())AddToMessage(Block::robot->BLE_read());
+        transfereBlocks = false;
+        return(CODE_COMPLETE);
+    }
     while(asciTmp != '\n'){
           if(Block::robot->BLE_dataAvailable()){
             asciTmp = Block::robot->BLE_read();
@@ -116,10 +122,7 @@
       CheckForTimeout();
       return(NO_MSG_CODE);
     }
-    if(MainAsci == 'R'){
-        transfereBlocks = false;
-        return(CODE_COMPLETE);
-    }
+    
     if(!(messageLength < MAX_MSG_L))return(CODE_TOO_LONG);
     return(CODE_PASSED);
   }
