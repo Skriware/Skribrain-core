@@ -102,11 +102,6 @@
       MainAsci = Block::robot->BLE_read();                                 //Reading first character of the message 255-error Code
       AddToMessage(MainAsci);  
       asciTmp = MainAsci;
-    if(MainAsci == 'R'){
-      while(Block::robot->BLE_dataAvailable())AddToMessage(Block::robot->BLE_read());
-        transfereBlocks = false;
-        return(CODE_COMPLETE);
-    }
     while(asciTmp != '\n'){
           if(Block::robot->BLE_dataAvailable()){
             asciTmp = Block::robot->BLE_read();
@@ -118,6 +113,11 @@
             }
           }
         }
+      if(MainAsci == 'R'){
+      while(Block::robot->BLE_dataAvailable())AddToMessage(Block::robot->BLE_read());
+        transfereBlocks = false;
+        return(CODE_COMPLETE);
+      }
     }else{
       CheckForTimeout();
       return(NO_MSG_CODE);

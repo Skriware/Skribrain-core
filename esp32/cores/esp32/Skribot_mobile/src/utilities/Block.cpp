@@ -149,6 +149,7 @@ size_t tmp_n;
         Block::BH->active_wait(100,10,interrupted,&action_with_no_interrupt);
         break;
     case 12:
+/*         
          if(used_blocks[0]->get_output_N() == 1){
          switch(used_blocks[0]->get_output()){
             case 0 : 
@@ -178,7 +179,7 @@ size_t tmp_n;
                 Block::robot->TurnLEDOn(tmp[0],tmp[1],tmp[2]);
         }
            Block::BH->active_wait(10,10,interrupted,&action_with_no_interrupt);
-/*
+*/
          if(used_blocks[1]->get_output_N() == 1){
          switch(used_blocks[1]->get_output()){
             case 0 : 
@@ -208,11 +209,11 @@ size_t tmp_n;
                 Block::robot->TurnLEDOn(tmp[0],tmp[1],tmp[2],used_blocks[0]->get_output());
         }
            Block::BH->active_wait(10,10,interrupted,&action_with_no_interrupt);
-*/
+
         break;
     case 13:
-        //Block::robot->TurnLEDOff(used_blocks[0]->get_output());
-          Block::robot->TurnLEDOff();
+        Block::robot->TurnLEDOff(used_blocks[0]->get_output());
+          //Block::robot->TurnLEDOff();
         break;
     case 14:
       {
