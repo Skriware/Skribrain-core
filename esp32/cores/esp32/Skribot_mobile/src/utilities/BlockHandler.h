@@ -55,7 +55,8 @@ public:
 	bool addConst(int id, int32_t value);
 	bool addConst(int id, int32_t *value,byte N);
 	bool addConst(int id,String value);	
-	bool checkForInterrupts();																		//Adding Blocks types
+	bool checkForInterrupts();
+	byte read_complete_line(bool add_to_code,char MainAsci);																		//Adding Blocks types
 	
 	bool active_wait(uint32_t ms,int interval,bool interruppted = false,bool *int_info = NULL);
 

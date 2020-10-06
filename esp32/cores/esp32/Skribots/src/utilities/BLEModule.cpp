@@ -56,7 +56,6 @@ void BLEModule::BLE_write(char *msg){
 	Serial.println(msg);
 	while(recivingData){
 		Serial.println("Waiting for data transfer to end.");
-		delay(100);
 	};
 	Serial.println("Sent");
 	#ifdef ESP_H
@@ -108,8 +107,8 @@ bool BLEModule::BLE_checkConnection(){
 
  int BLEModule::BLE_dataAvailable(){
     		while(recivingData){
-    			Serial.println("Waiting for data transfer to end");
-				delay(100);
+    			//Serial.println("Waiting for data transfer to end.");
+    			delay(10);
     		};
     		int dataAvalible;
     switch(_type){

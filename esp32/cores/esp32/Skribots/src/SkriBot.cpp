@@ -30,7 +30,7 @@ Skribot::Skribot(String predef){
   high_power_usage = false;
   eeprom_version_loaded = false;
   claw_closed = false;
-  claw_closed_time = true;
+  claw_closed_time = 0;
   config_mode = false;
   Remote_block_used = false;
   leftSmartRotor = NULL;

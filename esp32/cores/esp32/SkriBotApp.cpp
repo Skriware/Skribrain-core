@@ -157,7 +157,13 @@ void skribot_setup() {
       robot->status->TurnOn(YELLOW,2);
     #endif
     robot->status->ReadBatteryState();
+    if(robot->Board_type == 1 || robot->Board_type == 2){
+      robot->AddLED(SKRIBRAIN_LED_PIN_2,1);
+      robot->AddLED(SKRIBRAIN_LED_PIN_1,0);
+      robot->TurnLEDOff();
+    }
     Block::robot->ClearHardware();
+
 }
 
 void skribot_loop() {

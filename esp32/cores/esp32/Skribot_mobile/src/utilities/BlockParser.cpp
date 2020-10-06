@@ -46,10 +46,27 @@
                 break;
               }else{
                 *asciTmp = INVALID_MSG_ERROR_CODE;
+                break;
               }
             }
           }
         }
+  }
+
+  byte BlockHandler::read_complete_line(bool add_to_code,char _MainAsci){
+        char asciTmp = _MainAsci;
+        while(asciTmp != '\n'){
+          if(Block::robot->BLE_dataAvailable()){
+            asciTmp = Block::robot->BLE_read();
+            if(add_to_code)AddToMessage(asciTmp); 
+          }else{
+            if(CheckForTimeout()){
+              if(add_to_code)transfereBlocks = false;  
+              return(TIMEOUT_ERROR_CODE);
+            }
+          }
+        }
+      return(_MainAsci);
   }
 
   bool BlockHandler::CheckForTimeout(){
@@ -64,31 +81,22 @@
                 tmp = true;
                 if(ack_resend_time < MAX_ACK_RESENT_TIME)ack_resend_time += AFTER_TIMOUT_DELAY_INCREASE;
                 break;
-                
               }
             }
             return(tmp);
   }
 
   byte BlockHandler::readMessageLine(){
-      char MainAsci,asciTmp;
-      asciTmp = '0';
+      char MainAsci;
       if(Block::robot->BLE_dataAvailable()){
         MainAsci = Block::robot->BLE_read();                                 //Reading first character of the message 255-error Code
         CheckLongCodes(&MainAsci);
+        if(MainAsci == INVALID_MSG_ERROR_CODE) return(INVALID_MSG_ERROR_CODE);
         #ifdef DEBUG_MODE_1
         Serial.print(MainAsci);
         #endif
-        if(MainAsci == INVALID_MSG_ERROR_CODE) return(INVALID_MSG_ERROR_CODE);
-        while(asciTmp != '\n' && MainAsci != 'H' && MainAsci != 'C' && MainAsci != 'G'){
-          if(Block::robot->BLE_dataAvailable()){
-            asciTmp = Block::robot->BLE_read();
-            #ifdef DEBUG_MODE_1
-            Serial.print(asciTmp);
-            #endif
-          }else{
-           if(CheckForTimeout())return(TIMEOUT_ERROR_CODE);
-          }
+        if(MainAsci != 'H' && MainAsci != 'C' && MainAsci != 'G'){
+            MainAsci = read_complete_line(false,MainAsci);
         }
         return(MainAsci);
       }else{
@@ -96,36 +104,24 @@
       }
   }
   byte BlockHandler::readCodeLine(){
-    char MainAsci,asciTmp;
-    asciTmp = '0';
+    char MainAsci;
     if(Block::robot->BLE_dataAvailable()){
       MainAsci = Block::robot->BLE_read();                                 //Reading first character of the message 255-error Code
       AddToMessage(MainAsci);  
-      asciTmp = MainAsci;
-    while(asciTmp != '\n'){
-          if(Block::robot->BLE_dataAvailable()){
-            asciTmp = Block::robot->BLE_read();
-            AddToMessage(asciTmp); 
-          }else{
-            if(CheckForTimeout()){
-              transfereBlocks = false;  
-              return(TIMEOUT_ERROR_CODE);
-            }
-          }
-        }
+      MainAsci = read_complete_line(true,MainAsci);
       if(MainAsci == 'R'){
-      while(Block::robot->BLE_dataAvailable())AddToMessage(Block::robot->BLE_read());
         transfereBlocks = false;
         return(CODE_COMPLETE);
       }
+      if(MainAsci == TIMEOUT_ERROR_CODE)return(TIMEOUT_ERROR_CODE);
     }else{
       CheckForTimeout();
       return(NO_MSG_CODE);
     }
-    
     if(!(messageLength < MAX_MSG_L))return(CODE_TOO_LONG);
     return(CODE_PASSED);
   }
+
   void BlockHandler::processMessageLine(byte LineCode){
         char tmp = 'A';
         char tmpNameArray[32] = {' '};
@@ -183,8 +179,8 @@
                 clear();
                 Block::robot->Stop();
                 #ifndef _VARIANT_BBC_MICROBIT_
-                Block::robot->OpenClaw();
-                Block::robot->Put_Down();
+                //Block::robot->OpenClaw();
+                //Block::robot->Put_Down();
                 #endif
           break;
           case BEGIN:
@@ -194,6 +190,7 @@
           
           break;
           case REMOTE:
+          //Block::robot->BLE_write("ack\n");
           if(Block::robot->NLeftDCRotors ==0)Block::robot->AddDCRotor(SKRIBRAIN_MOTOR_L_DIR2_PIN,SKRIBRAIN_MOTOR_L_DIR1_PIN,"Left");
           if(Block::robot->NRightDCRotors ==0)Block::robot->AddDCRotor(SKRIBRAIN_MOTOR_R_DIR2_PIN,SKRIBRAIN_MOTOR_R_DIR1_PIN,"Right");
           Block::robot->RawRotorMove(readIntDirect(),readIntDirect());
@@ -365,12 +362,17 @@
                             Block::robot->AddLineSensor(LINE_PIN_2, 2);
                             Block::robot->AddLineSensor(LINE_PIN_3, 3);
                 }
+                if(Block::robot->NLEDs == 0){
+                            Block::robot->AddLED(SKRIBRAIN_LED_PIN_2,1);
+                            Block::robot->AddLED(SKRIBRAIN_LED_PIN_1,0);
+                }
               Serial.println("Calibrating No Line!");
               Block::robot->Calibrate_sensors_no_Line();
               }else if(tmp_tag[0] == 'B'){
                  Serial.println("Calibrating Line!");
               Block::robot->Calibrate_sensors_Line();
               Block::robot->Save_Calibration_Data(CALIB_LINE_SENSORS);
+              Block::robot->ClearHardware();
               }
                Block::robot->BLE_Flush();
           break;

@@ -76,9 +76,9 @@
  			break; 
  			case LINE_INTERRUPT:
  				if(trigger_type == LINE_DETECTED){
- 					line_trig = true;
- 				}else if(trigger_type == NO_LINE_DETECTED){
  					line_trig = false;
+ 				}else if(trigger_type == NO_LINE_DETECTED){
+ 					line_trig = true;
  				}else{
  					return(false);
  				}
